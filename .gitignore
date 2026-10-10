@@ -1,0 +1,14 @@
+# 打包产物
+*.tgz
+
+# 运行态状态文件（插件运行时写在 $DSH_HOME/zhixiaohang-guard/，不应进仓库）
+status.json
+
+# 编辑器 / 系统
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 依赖（本插件零依赖，留作兜底）
+node_modules/

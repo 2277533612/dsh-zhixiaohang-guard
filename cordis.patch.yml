@@ -1,0 +1,11 @@
+# dsh-zhixiaohang-guard bundle patch: 以包名加载插件本体。
+# 通过 `dsh plugin --profile <profile> add dsh-zhixiaohang-guard` 安装时，
+# 这一层会把插件挂进 profile；config 为真机验证过的默认值，可按需在
+# 自己 profile 的 cordis.patch.yml 里覆盖。
+- insert:
+    - id: zhixiaohang-guard
+      name: dsh-zhixiaohang-guard
+      config:
+        forceIpv4: true
+        forceIpv4Hosts: [token.nuaa.edu.cn]
+        forceIpv4Mode: auto
