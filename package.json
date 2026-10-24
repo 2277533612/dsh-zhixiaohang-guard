@@ -1,8 +1,8 @@
 {
   "name": "dsh-zhixiaohang-guard",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "type": "module",
-  "description": "DeepSeek Harness 插件：只对智小航做 10 RPM 排队节流，并在入路处把校外未连 VPN 时返回的 HTML/base64 乱码换成 <200 字符短提示（其它 provider 零影响）",
+  "description": "DeepSeek Harness 插件：只对智小航做 30 RPM 排队节流，并在入路处把校外未连 VPN 时返回的 HTML/base64 乱码换成 <200 字符短提示（其它 provider 零影响）",
   "main": "./index.mjs",
   "exports": {
     ".": "./index.mjs",
@@ -52,7 +52,7 @@
   },
   "meta": {
     "title": "智小航守卫",
-    "description": "智小航专属 10 RPM 节流 + 校外乱码入路屏蔽（其它 provider 零影响）"
+    "description": "智小航专属 30 RPM 节流 + 校外乱码入路屏蔽（其它 provider 零影响）"
   },
   "packageManager": "pnpm@11.7.0"
 }

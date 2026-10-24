@@ -2,7 +2,7 @@
  * dsh-zhixiaohang-guard —— 一个插件承担两件事（宿主插件，单文件 ESM，无依赖）：
  *
  *  A. 智小航专属节流：只对匹配的 provider（默认 zhixiaohang / token.nuaa.edu.cn）
- *     做滑动窗口 10 次/分钟排队等待；其它 provider 零延迟直通。
+ *     做滑动窗口 30 次/分钟排队等待；其它 provider 零延迟直通。
  *  B. 校外乱码屏蔽：没连校园网/VPN 时网关返回整页 HTML（含巨型 base64 + data:image），
  *     它在真实宿主里表现为**终止失败**（不是 assistant 正文）：
  *       - 非 2xx + HTML：openai SDK 把整页 HTML 折进异常消息。pi-ai 的 4000 字符上限
@@ -47,7 +47,7 @@ import { pathToFileURL } from 'node:url'
 import dns from 'node:dns'
 import net from 'node:net'
 
-export const VERSION = '1.3.0'
+export const VERSION = '1.4.0'
 
 export const name = 'zhixiaohang-guard'
 
@@ -59,8 +59,8 @@ export const inject = ['timer']
 export const DEFAULT_CONFIG = Object.freeze({
   /** 是否启用智小航专属节流 */
   pace: true,
-  /** 窗口内允许的请求数（智小航官方配额 10 RPM） */
-  rpm: 10,
+  /** 窗口内允许的请求数（智小航官方配额 30 RPM） */
+  rpm: 30,
   /** 滑动窗口长度（毫秒） */
   windowMs: 60_000,
   /** 需要节流的 provider id（优先匹配 payload/provider 的 id） */

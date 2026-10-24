@@ -2,10 +2,12 @@
 
 一个宿主插件，承担两件事：
 
-- **A. 智小航专属节流**：只对 `provider = zhixiaohang`（兜底按主机 `token.nuaa.edu.cn`）做 10 次/分钟滑动窗口排队；其它 provider（如 `deepseek-account`）**零延迟直通**。
+- **A. 智小航专属节流**：只对 `provider = zhixiaohang`（兜底按主机 `token.nuaa.edu.cn`）做 30 次/分钟滑动窗口排队；其它 provider（如 `deepseek-account`）**零延迟直通**。
 - **B. 校外乱码入路屏蔽**：没连校园网/VPN 时网关返回的整页 HTML（含巨型 base64）在**落盘之前**被换成一句 <200 字符短提示；原文一个字节都不进会话记录、模型上下文与日志。
 
 纯 JS、零依赖、单文件 ESM（`index.mjs`），不需要 python、不需要构建。
+
+> **v1.4.0**：默认 `rpm` 由 10 调整为 30（智小航官方配额调整）。窗口长度 `windowMs` 仍为 60000ms，其余行为不变；已在自己 profile 里显式写过 `rpm:` 的配置会覆盖该默认值，需手动改成 30。
 
 ---
 
@@ -74,7 +76,7 @@ agent loop step()
 ## 行为
 
 ### 节流（A）
-- 滑动窗口（默认 `rpm: 10, windowMs: 60000`）：窗口内满额时**排队等待**到有名额再发，不报错。
+- 滑动窗口（默认 `rpm: 30, windowMs: 60000`）：窗口内满额时**排队等待**到有名额再发，不报错。
 - 等待可取消：`signal` 中止时不再发起请求，改为产出协议里规范的 `aborted` finish。
 - 队列打满（默认 512）时直接放行——宁可少节流，也不卡死会话。
 - 非目标 provider 完全不进这个分支，不建定时器，延迟恒为 0。
@@ -129,7 +131,7 @@ code: RATE_LIMIT, providerRetryAfterMs: <服务端提示>, message: "429: 网关
       name: 'file:///C:/Users/<你的用户名>/.dsh/plugins/zhixiaohang-guard/index.mjs'
       config:
         pace: true
-        rpm: 10
+        rpm: 30
         windowMs: 60000
         providers: [zhixiaohang]
         hosts: [token.nuaa.edu.cn]
@@ -241,7 +243,7 @@ $py   = 'C:\Users\<你的用户名>\.dsh\dsh-runtimes\dsh-primary-runtime\depend
 
 3. **重启桌面应用**（单文件宿主插件在启动时加载）。
 4. 确认加载：日志里应出现
-   `zhixiaohang-guard: mounted（pace=10/60000ms，providers=[zhixiaohang]，…）`
+   `zhixiaohang-guard: mounted（pace=30/60000ms，providers=[zhixiaohang]，…）`
    且**没有** `did not activate` 警告。
 
 若发现该行被应用保存设置时抹掉（profile 文件由 Electron 应用托管），把这行改放到
